@@ -1,0 +1,25 @@
+# Compiled classes and build artifacts
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven build output directory
+target/
+
+# IDE-specific files
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.vscode/
+
+# Log files
+*.log
+
+# Temporary and backup files
+*~
+*.swp

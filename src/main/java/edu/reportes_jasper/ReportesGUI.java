@@ -63,7 +63,12 @@ public class ReportesGUI extends javax.swing.JFrame {
             }
         });
 
-        btnParametros.setText("Parametros");
+        btnParametros.setText("Params & DB");
+        btnParametros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnParametrosActionPerformed(evt);
+            }
+        });
 
         btnDB.setText("DB");
         btnDB.addActionListener(new java.awt.event.ActionListener() {
@@ -79,11 +84,11 @@ public class ReportesGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnReporteSimple, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addComponent(btnParametros)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addGap(42, 42, 42)
                 .addComponent(btnDB, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addComponent(btnParametros)
+                .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -100,24 +105,6 @@ public class ReportesGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReporteSimpleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteSimpleActionPerformed
-//        File reporte = new File(getClass().getResource("/reports/productos.jasper").getFile());
-        ////        System.out.println(reporte);
-//       
-//        if(!reporte.exists()){
-//            System.out.println("No existe el reporte");
-//            return;
-//        }
-//        try {
-//            var is = new BufferedInputStream(new FileInputStream(reporte.getAbsoluteFile()));
-//            JasperReport jr = (JasperReport) JRLoader.loadObject(is);
-//           
-//            JasperPrint jp = JasperFillManager.fillReport(jr, null,Conexion.getConnection());
-//            JasperViewer.viewReport(jp);
-//        } catch (FileNotFoundException ex) {
-//         ex.printStackTrace();
-//        } catch (JRException ex) {
-//           ex.printStackTrace();
-//        }
 
     mostrarReporte("/reportes/estatico.jasper", null, null);
 
@@ -127,21 +114,27 @@ public class ReportesGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         mostrarReporte("/reportes/productos.jasper", null, Conexion.getConnection());
     }//GEN-LAST:event_btnDBActionPerformed
+
+    private void btnParametrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnParametrosActionPerformed
+        // TODO add your handling code here:
+        String logo = getClass().getResource("/img/producto.jpg").toString();
+        Map<String, Object> params = new HashMap<>();
+        params.put("logo", logo);
+        params.put("idproducto", 4);
+        mostrarReporte("/reportes/producto.jasper", params, Conexion.getConnection());
+
+    }//GEN-LAST:event_btnParametrosActionPerformed
     public static void mostrarReporte(String srcReporte, Map<String, Object> params, Connection con) {
         try {
 //          
 
             JasperReport reporte = (JasperReport) JRLoader.loadObject(ReportesGUI.class.getResource(srcReporte));
 
-            //String logo = "src/img/logonuevo.jpg";
-//            String logo = getClass().getResource("/img/logo.png").toString();
-            Map<String, Object> map = new HashMap<>();
-//            map.put("logo", logo);
             reporte.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL);
-            JasperPrint jprint;
+            JasperPrint jprint = null;
             if (con != null) {
                 jprint = JasperFillManager.fillReport(reporte, params, con);
-            } else {
+            } else if (con == null && params == null) {
                 jprint = JasperFillManager.fillReport(reporte, params, new JREmptyDataSource());
             }
 

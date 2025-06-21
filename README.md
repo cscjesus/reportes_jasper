@@ -16,6 +16,30 @@ llamado `reports`
 *. Copiar el archivo compilado con extension `jasper` en el paquete `reportes`
 *. Agregar el siguiente codigo en un boton para mostrar el reporte
 ```
-codigo
+try {
+    JasperReport reporte = (JasperReport) JRLoader.loadObject(ReportesGUI.class.getResource(srcReporte));
+
+    //String logo = "src/img/logonuevo.jpg";
+//            String logo = getClass().getResource("/img/logo.png").toString();
+    Map<String, Object> map = new HashMap<>();
+//            map.put("logo", logo);
+    reporte.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL);
+    JasperPrint jprint;
+    if (con != null) {
+        jprint = JasperFillManager.fillReport(reporte, params, con);
+    } else {
+        jprint = JasperFillManager.fillReport(reporte, params, new JREmptyDataSource());
+    }
+
+    JasperViewer viewer = new JasperViewer(jprint, false);
+    viewer.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+    viewer.setVisible(true);
+} catch (JRException ex) {
+    ex.printStackTrace();
+}
 ```
->Verificar que cada que se modifique un reporte, primero se guarde antes de compilarlo en JasperStudio
+- Para crear parametros en JasperSoft Studio, ir a `Outline` click derecho en `Parameter`; `Create Parameter`
+- Para asignar el valor de un parametro a una Image, ir a las propiedades y dentro de `Image` ir a `Expression`, ahi asigar el valor del parametro.
+> Verificar que cada que se modifique un reporte, primero se guarde antes de compilarlo en JasperStudio
+> Al trabajar con una tabla, asegurarse en `Dataset and QueryBuilder Dialog` de presionar `Read Fields`.
