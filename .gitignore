@@ -7,16 +7,6 @@
 # Maven build output directory
 target/
 
-# IDE-specific files
-.idea/
-*.iml
-*.ipr
-*.iws
-.project
-.classpath
-.settings/
-.vscode/
-
 # Log files
 *.log
 
